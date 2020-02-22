@@ -1,0 +1,38 @@
+{
+  "name": "simple-api-nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node ./server/create-server.js",
+    "dev": "nodemon ./server/create-server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "sequelize-migrate": "npx sequelize db:migrate"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/m-ssilva/simple-api-nodejs.git"
+  },
+  "author": "m-ssilva",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/m-ssilva/simple-api-nodejs/issues"
+  },
+  "homepage": "https://github.com/m-ssilva/simple-api-nodejs#readme",
+  "dependencies": {
+    "@sendgrid/mail": "^6.5.3",
+    "bcryptjs": "^2.4.3",
+    "filter-files": "^0.4.0",
+    "koa": "^2.11.0",
+    "koa-bodyparser": "^4.2.1",
+    "koa-router": "^8.0.8",
+    "lodash": "^4.17.15",
+    "mysql2": "^2.1.0",
+    "sequelize": "^5.21.4",
+    "sequelize-cli": "^5.5.1"
+  },
+  "devDependencies": {
+    "jest": "^25.1.0",
+    "nodemon": "^2.0.2"
+  }
+}
