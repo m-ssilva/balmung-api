@@ -1,6 +1,6 @@
 const emailLib = require('../../../lib/email-confirmation.lib')
 
-const authenticationValidator = async query => {
+const emailConfirmationValidator = async query => {
   const errors = []
   const tokenExists = await emailLib.getConfirmationRegistry(query.token).catch(() => null)
   if (!query.token) { errors.push({ message: 'Informe um token de confirmação válido', path: 'query.token' }) }
@@ -10,7 +10,7 @@ const authenticationValidator = async query => {
 }
 
 const validator = async (ctx, next) => {
-  const result = await authenticationValidator(ctx.request.query)
+  const result = await emailConfirmationValidator(ctx.request.query)
   if (result.length) {
     ctx.status = 400
     ctx.body = { errors: result }

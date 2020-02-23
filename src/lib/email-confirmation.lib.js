@@ -4,4 +4,6 @@ const createConfirmationRegistry = async (email, token) => emailConfirmationMode
 
 const getConfirmationRegistry = async token => emailConfirmationModel.findOne({ where: { token } })
 
-module.exports = { createConfirmationRegistry, getConfirmationRegistry }
+const deleteConfirmationRegistryByEmail = async email => emailConfirmationModel.destroy({ where: { email } })
+
+module.exports = { createConfirmationRegistry, getConfirmationRegistry, deleteConfirmationRegistryByEmail }

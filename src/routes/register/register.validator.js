@@ -6,10 +6,10 @@ const validateEmail = email => EMAIL_REGEX.test(email)
 const createAccountValidator = async body => {
   const errors = []
   const emailValidator = await userLib.getUserByEmail(body.email).catch(() => null)
-  if (!body.email || !validateEmail(body.email)) { errors.push({ message: 'Informe um e-mail válido', path: 'body.email' }) }
+  if (!body.email || !validateEmail(body.email)) { errors.push({ message: 'Informe um email válido', path: 'body.email' }) }
   if (!body.password) { errors.push({ message: 'Informe uma senha válida', path: 'body.password' }) }
   if (!body.name) { errors.push({ message: 'Informe um nome válido', path: 'body.name' }) }
-  if (emailValidator) { errors.push({ message: 'E-mail já está em uso', path: 'body.email' }) }
+  if (emailValidator) { errors.push({ message: 'Email já está em uso', path: 'body.email' }) }
 
   return errors
 }
