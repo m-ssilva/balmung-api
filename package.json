@@ -8,7 +8,8 @@
     "dev": "nodemon ./server/create-server.js",
     "test": "jest",
     "sequelize-migrate": "npx sequelize db:migrate",
-    "cover": "npx jest --coverage"
+    "cover": "npx jest --coverage",
+    "lint": "eslint . --fix"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,10 @@
     "url": "https://github.com/m-ssilva/simple-api-nodejs/issues"
   },
   "homepage": "https://github.com/m-ssilva/simple-api-nodejs#readme",
+  "pre-commit": [
+    "lint",
+    "cover"
+  ],
   "dependencies": {
     "@sendgrid/mail": "^6.5.3",
     "bcryptjs": "^2.4.3",
@@ -34,8 +39,10 @@
   },
   "devDependencies": {
     "@types/jest": "^25.1.4",
+    "eslint": "^6.8.0",
     "jest": "^25.1.0",
     "nodemon": "^2.0.2",
+    "pre-commit": "^1.2.2",
     "supertest": "^4.0.2"
   }
 }
