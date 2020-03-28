@@ -4,7 +4,7 @@ const validateEmail = email => EMAIL_REGEX.test(email)
 
 const resendEmailValidator = async query => {
   const errors = []
-  if (!query.email && !validateEmail(query.email)) { errors.push({ message: 'Informe um email válido', path: 'query.email' }) }
+  if (!query.email || !validateEmail(query.email)) { errors.push({ message: 'Informe um email válido', path: 'query.email' }) }
 
   return errors
 }

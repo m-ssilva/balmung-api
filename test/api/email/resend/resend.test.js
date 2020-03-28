@@ -22,7 +22,7 @@ describe('GET on /api/email/resend', () => {
       .spyOn(userModel, 'findOne')
       .mockResolvedValue({ verified: false })
 
-    const destroyConfirmationEmailStubß = jest
+    const destroyConfirmationEmailStub = jest
       .spyOn(emailConfirmationModel, 'destroy')
       .mockResolvedValue(true)
 
@@ -40,8 +40,18 @@ describe('GET on /api/email/resend', () => {
       .expect(200, { message: 'Foi enviado um novo código de confirmação para o seu email' })
 
     expect(findOneUserStub).toBeCalledWith({ where: { email: 'test@test.com.br' } })
-    expect(destroyConfirmationEmailStubß).toBeCalledWith({ where: { email: 'test@test.com.br' } })
+    expect(destroyConfirmationEmailStub).toBeCalledWith({ where: { email: 'test@test.com.br' } })
     expect(createConfirmationEmailStub).toBeCalled()
     expect(sendGridStub).toBeCalledTimes(1)
+  })
+
+  it('when email is not valid, returns 400', async () => {
+    await request
+      .get('/api/email/resend')
+      .query({ email: 'not_valid_email' })
+      .expect(400, {
+        errors:
+          [{ message: 'Informe um email válido', path: 'query.email' }]
+      })
   })
 })
