@@ -1,10 +1,13 @@
-swagger: "2.0"
+openapi: "3.0.0"
 info:
   description: "List of all endpoints of API"
   version: "1.0.0"
   title: "Simple Node API"
-host: "petstore.swagger.io"
-basePath: "/api"
+servers:
+  - url: https://balmung-api.herokuapp.com/api
+    description: production server on heroku
+  - url: http://localhost:3000/api
+    description: local server
 tags:
 - name: "health"
   description: "information about API health"
@@ -12,144 +15,146 @@ tags:
   description: "register a new user in database"
 - name: "login"
   description: "authentication endpoint"
-schemes:
-- "https"
-- "http"
 paths:
   /health:
     get:
       tags:
       - "health"
       summary: "returns information about API health"
-      produces:
-      - "application/json"
       responses:
         200:
           description: "Success request"
-          schema:
-            $ref: "#/definitions/Health"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Health"
   /register:
     post:
       tags:
       - "register"
       summary: "register a new user in database"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "user object"
-        schema:
-          $ref: "#/definitions/RegisterParameters"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterParameters"
       responses:
         201:
           description: "Success request"
-          schema:
-            $ref: "#/definitions/RegisterSuccess"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegisterSuccess"
         400:
           description: "Bad Request"
-          schema:
-            $ref: "#/definitions/RegisterBadRequest"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegisterBadRequest"
         500:
           description: "Internal Error"
-          schema:
-            $ref: "#/definitions/DefaultError"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DefaultError"
   /login:
     post:
       tags:
       - "login"
       summary: "authenticate the user"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "username and password object"
-        schema:
-          $ref: "#/definitions/LoginParameters"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginParameters"
       responses:
         200:
           description: "Success request"
-          schema:
-            $ref: "#/definitions/LoginSuccess"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginSuccess"
+        400:
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/LoginBadRequest'
+                  - $ref: '#/components/schemas/LoginWrongUsername'
           
-definitions:
-  Health:
-    type: "object"
-    properties:
-      health:
-        type: "boolean"
+components:
+  schemas:
+    Health:
+      properties:
+        health:
+          type: "boolean"
         
-  DefaultError:
-    type: "object"
-    properties:
-      message:
-        type: "string"
-        example: "Ocoreu um erro inesperado"
-
-  RegisterParameters:
-    type: "object"
-    properties:
-      email:
-        type: "string"
-        example: "email@provider.com"
-      name:
-        type: "string"
-        example: "John Doe"
-      password:
-        type: "string"
-        example: "SecretPassword"
-
-  RegisterSuccess:
-    type: "object"
-    properties:
-      message:
-        type: "string"
-        example: "User created"
+    DefaultError:
+      properties:
+        message:
+          type: "string"
+          example: "Ocoreu um erro inesperado"
   
-  RegisterBadRequest:
-    type: "array"
-    items:
-      type: "object"
+    RegisterParameters:
+      properties:
+        email:
+          type: "string"
+          example: "email@provider.com"
+        name:
+          type: "string"
+          example: "John Doe"
+        password:
+          type: "string"
+          example: "SecretPassword"
+  
+    RegisterSuccess:
       properties:
         message:
           type: "string"
-          example: "Informe um email válido"
-        path:
+          example: "User created"
+    
+    RegisterBadRequest:
+      type: "array"
+      items:
+        type: "object"
+        properties:
+          message:
+            type: "string"
+            example: "Informe um email válido"
+          path:
+            type: "string"
+            example: "body.email"
+            
+    LoginParameters:
+      properties:
+        email:
           type: "string"
-          example: "body.email"
-          
-  LoginParameters:
-    type: "object"
-    properties:
-      email:
-        type: "string"
-        example: "email@provider.com"
-      password:
-        type: "string"
-        example: "SecretPassword"
-          
-  LoginSuccess:
-    type: "object"
-    properties:
-      message:
-        type: "string"
-        example: "Seja bem vindo!"
-        
-  LoginBadRequest:
-    type: "array"
-    items:
-      type: "object"
+          example: "email@provider.com"
+        password:
+          type: "string"
+          example: "SecretPassword"
+            
+    LoginSuccess:
       properties:
         message:
           type: "string"
-          example: "Informe um email válido"
-        path:
-          type: "string"
-          example: "body.email"
+          example: "Seja bem vindo!"
           
-  LoginWrongUsername:
-    type: "object"
-    properties:
-      message:
-        type: "string"
-        example: "Usuário ou senha incorretas"
-      
+    LoginBadRequest:
+      type: "array"
+      items:
+        type: "object"
+        properties:
+          message:
+            type: "string"
+            example: "Informe um email válido"
+          path:
+            type: "string"
+            example: "body.email"
+            
+    LoginWrongUsername:
+      properties:
+        message:
+          type: "string"
+          example: "Usuário ou senha incorretas"
