@@ -26,6 +26,7 @@
     "cover"
   ],
   "dependencies": {
+    "@koa/cors": "^3.0.0",
     "@sendgrid/mail": "^6.5.5",
     "bcryptjs": "^2.4.3",
     "filter-files": "^0.4.0",
