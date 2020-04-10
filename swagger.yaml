@@ -8,13 +8,6 @@ servers:
     description: production server on heroku
   - url: http://localhost:3000/api
     description: local server
-tags:
-- name: "health"
-  description: "information about API health"
-- name: "register"
-  description: "register a new user in database"
-- name: "login"
-  description: "authentication endpoint"
 paths:
   /health:
     get:
@@ -82,6 +75,72 @@ paths:
                 oneOf:
                   - $ref: '#/components/schemas/LoginBadRequest'
                   - $ref: '#/components/schemas/LoginWrongUsername'
+        500:
+          description: "Internal Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DefaultError"
+
+  /email/confirm:
+    get:
+      tags:
+        - "email"
+      summary: "email confirmation endpoint"
+      parameters:
+        - in: query
+          name: token
+          schema:
+            type: string
+      responses:
+        200:
+          description: "Success request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmailConfirmationSuccess"
+        400:
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailConfirmationBadRequest'
+        500:
+          description: "Internal Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DefaultError"
+    
+  /email/resend:
+    get:
+      tags:
+        - "email"
+      summary: "email confirmation resend endpoint"
+      parameters:
+        - in: query
+          name: email
+          schema:
+            type: string
+      responses:
+        200:
+          description: "Success request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmailResendSuccess"
+        400:
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailResendBadRequest'
+        500:
+          description: "Internal Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DefaultError"
           
 components:
   schemas:
@@ -162,3 +221,43 @@ components:
         message:
           type: "string"
           example: "Usuário ou senha incorretas"
+
+    EmailConfirmationSuccess:
+      properties:
+        message:
+          type: "string"
+          example: "O seu email foi verificado"
+    
+    EmailConfirmationBadRequest:
+      properties:
+        errors:
+          type: "array"
+          items:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                example: "Token de confirmação inválido ou expirado"
+              path:
+                type: "string"
+                example: "query.token"
+                
+    EmailResendSuccess:
+      properties:
+        message:
+          type: "string"
+          example: "Foi enviado um novo código de confirmação para o seu email"
+    
+    EmailResendBadRequest:
+      properties:
+        errors:
+          type: "array"
+          items:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                example: "Informe um email válido"
+              path:
+                type: "string"
+                example: "query.email"
