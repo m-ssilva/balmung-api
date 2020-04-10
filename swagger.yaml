@@ -115,16 +115,18 @@ components:
           example: "User created"
     
     RegisterBadRequest:
-      type: "array"
-      items:
-        type: "object"
-        properties:
-          message:
-            type: "string"
-            example: "Informe um email válido"
-          path:
-            type: "string"
-            example: "body.email"
+      properties:
+        errors:
+          type: "array"
+          items:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                example: "Informe um email válido"
+              path:
+                type: "string"
+                example: "body.email"
             
     LoginParameters:
       properties:
@@ -142,16 +144,18 @@ components:
           example: "Seja bem vindo!"
           
     LoginBadRequest:
-      type: "array"
-      items:
-        type: "object"
-        properties:
-          message:
-            type: "string"
-            example: "Informe um email válido"
-          path:
-            type: "string"
-            example: "body.email"
+      properties:
+        errors:
+          type: "array"
+          items:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                example: "Informe um email válido"
+              path:
+                type: "string"
+                example: "body.email"
             
     LoginWrongUsername:
       properties:
