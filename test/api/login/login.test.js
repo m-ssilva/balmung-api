@@ -2,6 +2,8 @@ const supertest = require('supertest')
 const app = require('../../../src/app')
 const userLib = require('../../../src/lib/user.lib')
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+const { JWT: { secretKey, expirationTime } } = require('../../../configs')
 
 let server
 let request
@@ -25,6 +27,7 @@ describe('POST on /api/login', () => {
     const getUserByEmailStub = jest
       .spyOn(userLib, 'getUserByEmail')
       .mockResolvedValue({
+        id: 1000,
         email: 'test@test.com.br',
         verified: true,
         password: 'crypted_password'
@@ -34,13 +37,18 @@ describe('POST on /api/login', () => {
       .spyOn(bcrypt, 'compare')
       .mockResolvedValue(true)
 
+    const jwtSignTokenStub = jest
+      .spyOn(jwt, 'sign')
+      .mockResolvedValue('fake_token')
+
     await request
       .post('/api/login')
       .send(requestUser)
-      .expect(200, { message: 'Seja bem vindo!' })
+      .expect(200, { success: true, token: 'fake_token' })
 
     expect(getUserByEmailStub).toBeCalledWith(requestUser.email)
     expect(bcryptStub).toBeCalledWith(requestUser.password, 'crypted_password')
+    expect(jwtSignTokenStub).toBeCalledWith({ id: 1000 }, secretKey, { expiresIn: expirationTime })
   })
 
   it('when all data is valid but email is not verified, should return 400 and error message', async () => {

@@ -11,5 +11,9 @@ module.exports = {
   },
   SEND_GRID: {
     token: process.env.SEND_GRID_TOKEN
+  },
+  JWT: {
+    secretKey: process.env.SECRET_KEY_JWT || `secretToken`,
+    expirationTime: process.env.EXPIRATION_TIME_JWT || 86400
   }
 }
